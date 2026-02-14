@@ -1,7 +1,7 @@
 #include "freertos/FreeRTOS.h"
 #include "driver/gpio.h"
 
-#define LED_PIN 2
+#define LED_PIN 12
 #define BUTTON_PIN 0
 
 bool blink_enabled = true;
@@ -31,7 +31,9 @@ void app_main(void) {
 
         if (pressed) {
             led_state = !led_state;
-            gpio_set_level(LED_PIN, led_state);
+            // gpio_set_level(LED_PIN, led_state);
+            if (led_state) *((uint32_t*) 0x3FF44008) = (1 << 12);
+            else *((uint32_t*) 0x3FF4400C) = (1 << 12);
         } else {
             gpio_set_level(LED_PIN, 0);
         }
